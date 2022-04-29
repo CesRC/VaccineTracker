@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.11;
+pragma solidity ^0.8.0;
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract VaccineTracker {
+contract VaccineTracker is Ownable {
     // State variables
 
     // Contract variables
@@ -149,7 +150,7 @@ contract VaccineTracker {
             address(0)
         );
         status[batchId][block.timestamp] = "ready";
-        params[batchId][block.timestamp] = ConservationParams("0", "0", "0");
+        params[batchId][block.timestamp] = ConservationParams("-", "-", "-");
         wallet[msg.sender][batchId] = true;
         emit CreateBatch(
             "Vaccine batch successfully created",
@@ -172,6 +173,7 @@ contract VaccineTracker {
         );
         timestamps.push(block.timestamp);
         status[batchId][block.timestamp] = "shipped";
+        params[batchId][block.timestamp] = ConservationParams("-", "-", "-");
         stock[batchId].destination = to;
         stock[batchId].currentStatus = "shipped";
         emit DeliverBatch(
@@ -199,6 +201,7 @@ contract VaccineTracker {
         );
         timestamps.push(block.timestamp);
         status[batchId][block.timestamp] = "delivered";
+        params[batchId][block.timestamp] = ConservationParams("-", "-", "-");
         stock[batchId].currentStatus = "delivered";
         wallet[stock[batchId].labAddress][batchId] = false;
         wallet[msg.sender][batchId] = true;
@@ -385,21 +388,21 @@ contract VaccineTracker {
 
     // Panic functions
 
-    function enableContract() external {
+    function enableContract() external onlyOwner {
         require(!isActive, "Contract already enabled");
-        require(
+        /*require(
             msg.sender == contractOwner,
             "Identity is not the contract owner"
-        );
+        );*/
         isActive = true;
     }
 
-    function disableContract() external {
+    function disableContract() external onlyOwner {
         require(isActive, "Contract already disabled");
-        require(
+        /*require(
             msg.sender == contractOwner,
             "Identity is not the contract owner"
-        );
+        );*/
         isActive = false;
     }
 }
