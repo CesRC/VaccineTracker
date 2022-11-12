@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.17;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract VaccineTracker is Ownable {
@@ -345,13 +345,13 @@ contract VaccineTracker is Ownable {
         contractActive
         returns (string[] memory)
     {
-        string[] memory temperatures = new string[](timestamps.length);
+        string[] memory humidities = new string[](timestamps.length);
         uint256 timestampIt;
         for (uint256 i = 0; i < timestamps.length; i++) {
             timestampIt = timestamps[i];
-            temperatures[i] = params[batchId][timestampIt].humidity;
+            humidities[i] = params[batchId][timestampIt].humidity;
         }
-        return temperatures;
+        return humidities;
     }
 
     function getAllLum(string calldata batchId)
@@ -361,13 +361,13 @@ contract VaccineTracker is Ownable {
         contractActive
         returns (string[] memory)
     {
-        string[] memory temperatures = new string[](timestamps.length);
+        string[] memory luminosities = new string[](timestamps.length);
         uint256 timestampIt;
         for (uint256 i = 0; i < timestamps.length; i++) {
             timestampIt = timestamps[i];
-            temperatures[i] = params[batchId][timestampIt].luminosity;
+            luminosities[i] = params[batchId][timestampIt].luminosity;
         }
-        return temperatures;
+        return luminosities;
     }
 
     function getAllStatus(string calldata batchId)
